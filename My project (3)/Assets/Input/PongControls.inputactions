@@ -1,0 +1,76 @@
+{
+    "name": "PongControls",
+    "maps": [
+        {
+            "name": "Paddle Controls",
+            "id": "112cd322-6c6b-42cc-934a-d284000387c9",
+            "actions": [
+                {
+                    "name": "MovePaddle1",
+                    "type": "Button",
+                    "id": "5aaba782-2c84-4612-aea0-975ac6e35de8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MovePaddle2",
+                    "type": "Button",
+                    "id": "39045249-8d53-49c9-8a2e-de606fcde09b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c80cdde7-8cba-4712-ad58-089d6f473ede",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePaddle1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ace0cea-6fb5-48bf-aaa8-456d9fb02479",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePaddle1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d5004c93-bcab-45c5-926e-cd1d88b37c2f",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePaddle2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "60558dc6-59b8-4770-868e-1b74dbf5aa56",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MovePaddle2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
