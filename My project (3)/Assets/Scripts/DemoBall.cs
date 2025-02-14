@@ -7,10 +7,17 @@ public class DemoBall : MonoBehaviour
     public float initialSpeed = 1f;
     public float maxSpeed = 20f;
     public float increment = 0.5f;
+    public int yellowThreshold = 5;
+    public int redThreshold = 9;
+    
 
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI winnerText;
     public GameObject winnerTextObject;
+
+
+    [HideInInspector]
+    public float speedMultiplier = 1f;
 
     int leftScore = 0;
     int rightScore = 0;
@@ -28,6 +35,7 @@ public class DemoBall : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         ResetBall();
         winnerTextObject.SetActive(false);
+        scoreText.color = Color.green;
     }
 
     // Update is called once per frame
@@ -48,6 +56,7 @@ public class DemoBall : MonoBehaviour
 
     void ResetBall(){
         currentSpeed = initialSpeed;
+        speedMultiplier = 1f;
 
         GameObject ground = GameObject.FindGameObjectWithTag("Ground"); 
 
@@ -74,7 +83,7 @@ public class DemoBall : MonoBehaviour
         direction += new Vector3(0f, 0f, Random.Range(-0.5f, 0.5f));
         direction.Normalize();
 
-        rb.linearVelocity = direction * currentSpeed;
+        rb.linearVelocity = direction * currentSpeed * speedMultiplier;
 
     }
 
@@ -96,26 +105,30 @@ public class DemoBall : MonoBehaviour
             }
 
             currentSpeed = Mathf.Min(currentSpeed + increment, maxSpeed);
-            rb.linearVelocity = newDirection * currentSpeed;
+            rb.linearVelocity = newDirection * currentSpeed * speedMultiplier;
         }
         else if (other.gameObject.CompareTag("Walls")){
             //Reflects the ball off the wall
-            Vector3 reflected = new Vector3(rb.linearVelocity.x, 0, -rb.linearVelocity.z).normalized;
-            rb.linearVelocity = reflected * currentSpeed;
+            Vector3 contactNormal = other.contacts[0].normal;
+            Vector3 reflectedVelocity = Vector3.Reflect(rb.linearVelocity, contactNormal);
+
+            rb.linearVelocity = reflectedVelocity.normalized * currentSpeed;
         }
         else if (other.gameObject.CompareTag("Goal")){
 
             if(other.gameObject.name.Contains("Left")){
                 lastScored = "LeftPaddle";
-                leftScore += 1;
+                rightScore += 1;
                 scoreText.text = $"{leftScore}:{rightScore}";
-                Debug.Log($"Score! {other.gameObject.name} has scored! The score is {leftScore}-{rightScore}");
+                Debug.Log($"Score! The Right Player has scored! The score is {leftScore}-{rightScore}");
+                UpdateScoreUI();
             }
             else if(other.gameObject.name.Contains("Right")){
                 lastScored = "RightPaddle";
-                rightScore += 1; 
+                leftScore += 1; 
                 scoreText.text = $"{leftScore}:{rightScore}";
-                Debug.Log($"Score! {other.gameObject.name} has scored! The score is {leftScore}-{rightScore}");
+                Debug.Log($"Score! The Left Player has scored! The score is {leftScore}-{rightScore}");
+                UpdateScoreUI();
             }
 
             ResetBall();
@@ -136,4 +149,18 @@ public class DemoBall : MonoBehaviour
         }
 
     }
+
+
+void UpdateScoreUI(){
+
+    
+
+    if(leftScore >= yellowThreshold || rightScore >= yellowThreshold){
+        scoreText.color = Color.yellow;
+    }
+    if (leftScore >= redThreshold || rightScore >= redThreshold){
+        scoreText.color = Color.red;
+     }
+    }
+
 }

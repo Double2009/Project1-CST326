@@ -11,6 +11,9 @@ public class DemoPaddle : MonoBehaviour
     public bool isLeft;
     public bool isRight;
 
+    public AudioClip paddleHitClip;
+    public float speedDivisor = 10f;
+
     private Vector2 movementInput;
 
     private Rigidbody rb;
@@ -64,5 +67,31 @@ public class DemoPaddle : MonoBehaviour
 
         paddleTransform.position = newPosition;
         
+    }
+
+    void OnCollisionEnter(Collision collision){
+
+        if(collision.gameObject.CompareTag("Ball")){
+
+
+            BoxCollider paddleCollider = GetComponent<BoxCollider>();
+            float paddleHalf = paddleCollider.bounds.size.z/2;
+            float hitFactor = (collision.transform.position.z - transform.position.z)/paddleHalf;
+
+            Rigidbody ballRb = collision.gameObject.GetComponent<Rigidbody>();
+            float ballSpeed = ballRb ? ballRb.linearVelocity.magnitude : 0f;
+
+            float speedFactor = ballSpeed/speedDivisor;
+
+            float pitch = 1.0f + (Mathf.Abs(hitFactor) * 0.3f) + (speedFactor * 0.3f);
+
+            if(paddleHitClip != null){
+            AudioSource audioSrc = GetComponent<AudioSource>();
+            audioSrc.clip = paddleHitClip;
+            audioSrc.pitch = pitch;
+            audioSrc.Play();
+            }
+        }
+
     }
 }
